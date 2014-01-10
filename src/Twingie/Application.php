@@ -4,6 +4,7 @@ namespace Twingie;
 
 
 use Twingie\Router\Route\Route;
+use Zend\EventManager\EventManager;
 
 class Application
 {
@@ -12,6 +13,11 @@ class Application
      * @var array
      */
     protected $commands = array();
+
+    /**
+     * @var EventManager
+     */
+    protected $eventManager;
 
     /**
      * @param $command
@@ -46,6 +52,27 @@ class Application
         $argvCopy = $argv;
         array_shift($argvCopy);
         $this->dispatch($argvCopy);
+    }
+
+    /**
+     * @param \Zend\EventManager\EventManager $eventManager
+     * @return self
+     */
+    public function setEventManager($eventManager)
+    {
+        $this->eventManager = $eventManager;
+        return $this;
+    }
+
+    /**
+     * @return \Zend\EventManager\EventManager
+     */
+    public function getEventManager()
+    {
+        if (null === $this->eventManager) {
+            $this->eventManager = new EventManager();
+        }
+        return $this->eventManager;
     }
 
 }

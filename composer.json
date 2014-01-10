@@ -1,0 +1,22 @@
+{
+    "name": "mtymek/twingie",
+    "description": "Twingie - PHP microframework for console",
+    "require": {
+        "zendframework/zend-console": "2.2.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Mateusz Tymek",
+            "email": "mtymek@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Twingie": "src"
+        }
+    }
+}

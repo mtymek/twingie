@@ -3,6 +3,7 @@
 namespace Twingie;
 
 
+use Twingie\Event\Event;
 use Twingie\Router\Route\Route;
 use Zend\EventManager\EventManager;
 
@@ -18,6 +19,11 @@ class Application
      * @var EventManager
      */
     protected $eventManager;
+
+    /**
+     * @var Event
+     */
+    protected $event;
 
     /**
      * @param $command
@@ -36,9 +42,14 @@ class Application
 
     public function dispatch($argv)
     {
+        $event = $this->getEvent();
         foreach ($this->commands as $command) {
             if ($match = $command['route']->match($argv)) {
-                $command['controller']();
+
+                $event->setParams($match->getParams());
+
+                $command['controller']($event);
+                break;
             }
         }
     }
@@ -73,6 +84,30 @@ class Application
             $this->eventManager = new EventManager();
         }
         return $this->eventManager;
+    }
+
+    /**
+     * @param \Twingie\Event\Event $event
+     *
+     * @return self
+     */
+    public function setEvent($event)
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    /**
+     * @return \Twingie\Event\Event
+     */
+    public function getEvent()
+    {
+        if (null === $this->event) {
+            $this->event = new Event();
+            $this->event->setTarget($this);
+        }
+        return $this->event;
     }
 
 }

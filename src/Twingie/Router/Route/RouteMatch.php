@@ -38,4 +38,12 @@ class RouteMatch
         }
         return $this->params[$name];
     }
+
+    /**
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
 }

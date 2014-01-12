@@ -42,16 +42,17 @@ class Application
 
     public function dispatch($argv)
     {
+        $eventManager = $this->getEventManager();
         $event = $this->getEvent();
+        $eventManager->trigger(Event::EVENT_START, $event);
         foreach ($this->commands as $command) {
             if ($match = $command['route']->match($argv)) {
-
                 $event->setParams($match->getParams());
-
                 $command['controller']($event);
                 break;
             }
         }
+        $eventManager->trigger(Event::EVENT_FINISH, $event);
     }
 
     /**

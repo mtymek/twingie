@@ -5,6 +5,7 @@ namespace Twingie;
 
 use Twingie\Event\Event;
 use Twingie\Router\Route\Route;
+use Zend\Console\Console;
 use Zend\EventManager\EventManager;
 
 class Application
@@ -26,6 +27,11 @@ class Application
     protected $event;
 
     /**
+     * @var Console
+     */
+    protected $console;
+
+    /**
      * @param $command
      * @param $controller
      */
@@ -45,6 +51,8 @@ class Application
         $eventManager = $this->getEventManager();
         $event = $this->getEvent();
         $eventManager->trigger(Event::EVENT_START, $event);
+
+        // TODO: trigger route event here, find route elsewhere
         foreach ($this->commands as $command) {
             if ($match = $command['route']->match($argv)) {
                 $event->setParams($match->getParams());
@@ -63,6 +71,8 @@ class Application
         global $argv;
         $argvCopy = $argv;
         array_shift($argvCopy);
+
+        $this->console = Console::getInstance();
         $this->dispatch($argvCopy);
     }
 
@@ -111,4 +121,22 @@ class Application
         return $this->event;
     }
 
+    /**
+     * @param \Zend\Console\Console $console
+     *
+     * @return self
+     */
+    public function setConsole($console)
+    {
+        $this->console = $console;
+        return $this;
+    }
+
+    /**
+     * @return \Zend\Console\Console
+     */
+    public function getConsole()
+    {
+        return $this->console;
+    }
 }
